@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="spondonict.com.phonetracker.MainActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cell ID"
+        android:id="@+id/tvcellid" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MNC"
+        android:id="@+id/tvmnc"
+        android:layout_below="@+id/tvcellid"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MCC"
+        android:id="@+id/tvmcc"
+        android:layout_below="@+id/tvmnc"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LAC"
+        android:id="@+id/tvlac"
+        android:layout_below="@+id/tvmcc"/>
+
+    <TextView
+    android:id="@+id/tvimei"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="IMEI"
+    android:layout_below="@+id/tvlac"/>
+    <TextView
+        android:id="@+id/tvssno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SSNO"
+        android:layout_below="@+id/tvlac"/>
+
+    <TextView
+        android:id="@+id/tvssid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SID"
+        android:layout_below="@+id/tvlac"/>
+
+    <TextView
+        android:id="@+id/tvphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PhN" />
+
+    <Button
+        android:id="@+id/btdata"
+        android:layout_width="131dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/tvimei"
+        android:layout_weight="0.15"
+        android:text="Get Data" />
+
+    <Button
+        android:id="@+id/btconnect"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:text="Isconnect" />
+
+</LinearLayout>
