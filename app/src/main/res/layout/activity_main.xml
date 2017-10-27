@@ -66,9 +66,8 @@
     <Button
         android:id="@+id/btdata"
         android:layout_width="131dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tvimei"
-        android:layout_weight="0.15"
         android:text="Get Data" />
 
     <Button
@@ -76,5 +75,11 @@
         android:layout_width="137dp"
         android:layout_height="wrap_content"
         android:text="Isconnect" />
+
+    <Button
+        android:id="@+id/btnetwork"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:text="Start" />
 
 </LinearLayout>

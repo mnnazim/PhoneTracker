@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -36,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView tvcellid,tvmcc,tvmnc,tvlac,tvimei,tvssno,tvssid,tvphone;
-    Button btdata,btconnect;
+    Button btdata,btconnect,btnetwork;
     private int MY_PERMISSIONS_REQUEST_READ_CONTACTS=10;
     TelephonyManager tm;
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
     final int MY_PERMISSIONS_REQUEST_LOC=100;
     final int MY_PERMISSIONS_REQUEST_PSTATE=110;
     int resultCode=0;
+    boolean threadFlag=false;
+    boolean buttonflag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,18 +164,19 @@ public class MainActivity extends AppCompatActivity {
         tvssid=(TextView)findViewById(R.id.tvssid);
         tvphone=(TextView)findViewById(R.id.tvphone);
         btconnect=(Button)findViewById(R.id.btconnect);
+        btnetwork=(Button)findViewById(R.id.btnetwork);
          tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         btdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if(android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
                     printInfos();
                 }else{
-                    printInfos();
-                    //getInfos();
+                    //printInfos();
+                    getInfos();
                 }
-                //getInfos(); //for sdk greater than 21
+                //getInfos(); //for sdk greater than 23
             }
         });
 
@@ -180,7 +186,84 @@ public class MainActivity extends AppCompatActivity {
                 CheckConnectivity();
             }
         });
+
+        final Thread thread=new Thread(new networkThread());
+        btnetwork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(buttonflag){
+                    threadFlag=false;
+                    buttonflag=false;
+                    btnetwork.setText("Start");
+                    //thread.stop();
+
+                }else{
+                    buttonflag=true;
+                    threadFlag=true;
+                    btnetwork.setText("Stop");
+                   thread.start();
+
+
+
+                }
+            }
+        });
     }
+
+    class networkThread implements Runnable{
+        @Override
+        public void run() {
+            while (threadFlag) {
+
+                try {
+                    netWork n=new netWork();
+                    n.execute();
+                    Thread.sleep(10000);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class netWork extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String result= checkNetwork();
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private String checkNetwork() {
+        ConnectivityManager ConnectionManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=ConnectionManager.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()==true ){
+            String networktype=networkInfo.getTypeName().toLowerCase();
+            if(networktype.equals("wifi")){
+                //Toast.makeText(getApplicationContext(),networktype,Toast.LENGTH_SHORT).show();
+                WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                String ssid = wifiInfo.getSSID();
+                //Toast.makeText(getApplicationContext(),"Connect to "+ssid,Toast.LENGTH_SHORT).show();
+                return "Connect to "+ssid;
+            }else if(networktype.equals("mobile")){
+                return "Connect to mobile data";
+            }
+        }else{
+            //Toast.makeText(getApplicationContext(),"No connectivity",Toast.LENGTH_SHORT).show();
+        }
+        return "No Connectivity";
+    }
+
     @TargetApi(21)
     void getInfos(){
         TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
