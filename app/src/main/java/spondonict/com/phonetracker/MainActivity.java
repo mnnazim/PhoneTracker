@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView tvcellid,tvmcc,tvmnc,tvlac,tvimei,tvssno,tvssid,tvphone;
-    Button btdata,btconnect,btnetwork;
+    Button btdata,btconnect,btnetwork,btcdma;
     private int MY_PERMISSIONS_REQUEST_READ_CONTACTS=10;
     TelephonyManager tm;
     private static final int PERMISSIONS_REQUEST_READ_PHONE_STATE = 999;
@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         tvphone=(TextView)findViewById(R.id.tvphone);
         btconnect=(Button)findViewById(R.id.btconnect);
         btnetwork=(Button)findViewById(R.id.btnetwork);
+        btcdma=(Button)findViewById(R.id.btcdma);
          tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         btdata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +207,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
+            }
+        });
+
+        btcdma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,CDMA.class));
             }
         });
     }
@@ -279,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
                     CellSignalStrengthGsm cellStrength = cellInfoGsm.getCellSignalStrength();
                     int cid = cellIdentity.getCid();
                     int lac = cellIdentity.getLac();
+
                     tvmcc.setText("MCC: " + cellIdentity.getMcc());
                     tvmnc.setText("MNC: " + cellIdentity.getMnc());
                     tvcellid.setText("CellID: " + cid);
